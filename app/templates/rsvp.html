@@ -1,0 +1,278 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة - حضور</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 35px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(14,165,233,0.15);
+        }
+
+        .brand {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0EA5E9;
+            margin-bottom: 25px;
+        }
+        .brand span { color: #1e293b; }
+
+        .invite-icon { font-size: 3.5rem; margin-bottom: 15px; }
+
+        .invite-label {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .guest-name {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 25px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #e2e8f0;
+            margin: 20px 0;
+        }
+
+        .event-info {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: right;
+        }
+        .event-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0c4a6e;
+            margin-bottom: 12px;
+        }
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.92rem;
+        }
+
+        .actions { display: flex; flex-direction: column; gap: 12px; }
+
+        .btn-accept {
+            background: linear-gradient(135deg, #0EA5E9, #0284c7);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(14,165,233,0.3);
+            transition: transform 0.2s;
+        }
+        .btn-accept:hover { transform: translateY(-2px); }
+
+        .btn-decline {
+            background: white;
+            color: #ef4444;
+            border: 2px solid #fecaca;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .btn-decline:hover { background: #fef2f2; }
+
+        /* شاشة الباركود */
+        .barcode-screen { display: none; }
+        .barcode-screen.active { display: block; }
+        .main-screen.hidden { display: none; }
+
+        .success-icon { font-size: 3rem; margin-bottom: 15px; }
+        .barcode-screen h2 {
+            color: #0c4a6e;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .barcode-screen p {
+            color: #888;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .qr-wrapper {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+        .qr-image { width: 180px; height: 180px; }
+        .token-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            color: #0EA5E9;
+            word-break: break-all;
+            margin-top: 15px;
+        }
+        .save-hint {
+            color: #22c55e;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        /* شاشة الاعتذار */
+        .decline-screen { display: none; }
+        .decline-screen.active { display: block; }
+        .decline-screen h2 { color: #ef4444; font-size: 1.5rem; margin-bottom: 10px; }
+        .decline-screen p { color: #888; }
+
+        .loading-text { color: #888; padding: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="brand">حضور<span>.</span></div>
+
+    <!-- الشاشة الرئيسية -->
+    <div class="main-screen" id="main-screen">
+        <div class="invite-icon">🎉</div>
+        <div class="invite-label">يسعدنا دعوتكم</div>
+        <div class="guest-name" id="guest-name">جاري التحميل...</div>
+        <hr class="divider">
+        <div class="event-info" id="event-info">
+            <p class="loading-text">جاري التحميل...</p>
+        </div>
+        <div class="actions" id="actions" style="display:none">
+            <button class="btn-accept" onclick="respond('accepted')">✅ قبول الدعوة</button>
+            <button class="btn-decline" onclick="respond('declined')">❌ الاعتذار عن الدعوة</button>
+        </div>
+    </div>
+
+    <!-- شاشة الباركود -->
+    <div class="barcode-screen" id="barcode-screen">
+        <div class="success-icon">🎟️</div>
+        <h2>تم تأكيد حضورك!</h2>
+        <p>بطاقة دخولك الشخصية</p>
+        <div class="qr-wrapper">
+            <img id="qr-image" class="qr-image" src="" alt="باركود الدخول">
+        </div>
+        <div class="save-hint">📱 احفظ الباركود للدخول</div>
+        <div class="token-box" id="token-text"></div>
+    </div>
+
+    <!-- شاشة الاعتذار -->
+    <div class="decline-screen" id="decline-screen">
+        <div style="font-size:3rem;margin-bottom:15px">🙏</div>
+        <h2>شكراً على إخبارنا</h2>
+        <p>نتمنى لكم أوقاتاً طيبة</p>
+    </div>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const guestId = params.get('guest_id');
+
+    async function loadGuest() {
+        if (!guestId) {
+            document.getElementById('guest-name').textContent = 'رابط غير صحيح';
+            return;
+        }
+
+        const res = await fetch(`/guest/${guestId}`);
+        const data = await res.json();
+        if (!data.guest) return;
+
+        const guest = data.guest;
+        const event = data.event;
+
+        document.getElementById('guest-name').textContent = guest.name;
+
+        const date = event.event_date
+            ? new Date(event.event_date).toLocaleDateString('ar', {weekday:'long', year:'numeric', month:'long', day:'numeric'})
+            : 'غير محدد';
+
+        document.getElementById('event-info').innerHTML = `
+            <div class="event-title">${event.title}</div>
+            <div class="info-row">📍 <span>${event.location || 'غير محدد'}</span></div>
+            <div class="info-row">📅 <span>${date}</span></div>
+            <div class="info-row">👤 <span>دعوة من: ${event.owner_name}</span></div>`;
+
+        if (guest.status === 'accepted') {
+            loadBarcode();
+        } else if (guest.status === 'declined') {
+            showDecline();
+        } else {
+            document.getElementById('actions').style.display = 'flex';
+        }
+    }
+
+    async function respond(status) {
+        document.getElementById('actions').innerHTML = '<p class="loading-text">جاري المعالجة...</p>';
+
+        const res = await fetch('/rsvp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ guest_id: guestId, status })
+        });
+
+        const data = await res.json();
+
+        if (status === 'accepted') {
+            showBarcode(data.qr_code, data.token);
+        } else {
+            showDecline();
+        }
+    }
+
+    function showBarcode(qrCode, token) {
+        document.getElementById('main-screen').classList.add('hidden');
+        document.getElementById('barcode-screen').classList.add('active');
+        document.getElementById('qr-image').src = `data:image/png;base64,${qrCode}`;
+        document.getElementById('token-text').textContent = token;
+    }
+
+    async function loadBarcode() {
+        const res = await fetch(`/guest-pass/${guestId}`);
+        const data = await res.json();
+        if (data.qr_code) showBarcode(data.qr_code, data.token);
+    }
+
+    function showDecline() {
+        document.getElementById('main-screen').classList.add('hidden');
+        document.getElementById('decline-screen').classList.add('active');
+    }
+
+    loadGuest();
+</script>
+
+</body>
+</html>
