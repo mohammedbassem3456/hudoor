@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حضور - منصة الدعوات الذكية</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #1e293b; }
+
+        nav {
+            background: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 1.8rem; font-weight: 800; color: #0EA5E9; }
+        .logo span { color: #1e293b; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #555; font-size: 0.95rem; }
+        .btn-nav {
+            background: #0EA5E9;
+            color: white !important;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 100px 40px;
+            text-align: center;
+        }
+        .hero-badge {
+            background: #e0f2fe;
+            color: #0EA5E9;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid #bae6fd;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .hero h1 span { color: #0EA5E9; }
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            background: #0EA5E9;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(14,165,233,0.3);
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-secondary {
+            background: white;
+            color: #0EA5E9;
+            padding: 16px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 2px solid #0EA5E9;
+            transition: transform 0.2s;
+        }
+        .btn-secondary:hover { transform: translateY(-2px); }
+
+        .stats {
+            background: white;
+            padding: 50px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .stat-item { text-align: center; }
+        .stat-item .num { font-size: 2.5rem; font-weight: 900; color: #0EA5E9; }
+        .stat-item .lbl { color: #888; font-size: 0.95rem; margin-top: 5px; }
+
+        .features {
+            padding: 80px 40px;
+            background: #f8fafc;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-title h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0c4a6e;
+            margin-bottom: 10px;
+        }
+        .section-title p { color: #888; font-size: 1rem; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+            margin: auto;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+        .feature-card:hover { transform: translateY(-5px); }
+        .feature-icon {
+            width: 55px;
+            height: 55px;
+            background: #e0f2fe;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .feature-card h3 { color: #0c4a6e; margin-bottom: 8px; font-size: 1.1rem; }
+        .feature-card p { color: #888; font-size: 0.9rem; line-height: 1.6; }
+
+        .event-types {
+            padding: 80px 40px;
+            background: white;
+        }
+        .types-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: auto;
+        }
+        .type-card {
+            background: #f0f9ff;
+            border: 2px solid #e0f2fe;
+            border-radius: 16px;
+            padding: 25px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 140px;
+        }
+        .type-card:hover {
+            background: #0EA5E9;
+            border-color: #0EA5E9;
+            color: white;
+            transform: translateY(-3px);
+        }
+        .type-card:hover p { color: white; }
+        .type-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .type-card p { color: #555; font-size: 0.9rem; margin-top: 5px; }
+
+        .cta {
+            background: linear-gradient(135deg, #0EA5E9, #0284c7);
+            padding: 80px 40px;
+            text-align: center;
+            color: white;
+        }
+        .cta h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+        .cta p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 35px; }
+        .btn-white {
+            background: white;
+            color: #0EA5E9;
+            padding: 16px 50px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        footer {
+            background: #0c4a6e;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .stats { gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">حضور<span>.</span></div>
+    <div class="nav-links">
+        <a href="/packages">الباقات</a>
+        <a href="/dashboard">لوحة التحكم</a>
+        <a href="/packages" class="btn-nav">ابدأ الآن</a>
+    </div>
+</nav>
+
+<div class="hero">
+    <div class="hero-badge">✨ منصة الدعوات الذكية في السعودية</div>
+    <h1>دعواتك تستحق<br><span>لمسة احترافية</span></h1>
+    <p>أرسل دعواتك لمئات الضيوف بضغطة واحدة، وتابع التأكيدات لحظة بلحظة مع باركود دخول لكل مدعو</p>
+    <div class="hero-btns">
+        <a href="/packages" class="btn-primary">ابدأ مجاناً ←</a>
+        <a href="#features" class="btn-secondary">اكتشف المزايا</a>
+    </div>
+</div>
+
+<div class="stats">
+    <div class="stat-item">
+        <div class="num">+500</div>
+        <div class="lbl">مناسبة ناجحة</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">+50,000</div>
+        <div class="lbl">دعوة مُرسلة</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">98%</div>
+        <div class="lbl">نسبة الرضا</div>
+    </div>
+    <div class="stat-item">
+        <div class="num">+100</div>
+        <div class="lbl">تصميم جاهز</div>
+    </div>
+</div>
+
+<div class="features" id="features">
+    <div class="section-title">
+        <h2>كل ما تحتاجه في مكان واحد</h2>
+        <p>منصة متكاملة لإدارة دعوات مناسباتك بكل احترافية</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📨</div>
+            <h3>دعوات مخصصة</h3>
+            <p>كل مدعو يستلم دعوة باسمه عبر واتساب برسالة احترافية مصممة خصيصاً</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>تأكيد الحضور</h3>
+            <p>تابع من قبل ومن اعتذر لحظة بلحظة من لوحة تحكم سهلة الاستخدام</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎟️</div>
+            <h3>باركود الدخول</h3>
+            <p>كل ضيف يستلم باركود فريد عند القبول، يُمسح عند الدخول بدون أجهزة خاصة</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>إحصائيات لحظية</h3>
+            <p>شاهد عدد المقبولين والمعتذرين والمنتظرين في الوقت الفعلي</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>تصاميم احترافية</h3>
+            <p>اختر من مجموعة تصاميم جاهزة أو اطلب تصميماً خاصاً يعبر عن مناسبتك</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔔</div>
+            <h3>تذكير تلقائي</h3>
+            <p>يرسل النظام تذكيراً للمدعوين قبل المناسبة بيوم تلقائياً</p>
+        </div>
+    </div>
+</div>
+
+<div class="event-types">
+    <div class="section-title">
+        <h2>لكل مناسبة طابعها</h2>
+        <p>حضور يدعم جميع أنواع المناسبات</p>
+    </div>
+    <div class="types-grid">
+        <div class="type-card" onclick="window.location.href='/packages'">
+            <div class="type-icon">💍</div>
+            <strong>عرس</strong>
+            <p>حفل زواج</p>
+        </div>
+        <div class="type-card" onclick="window.location.href='/packages'">
+            <div class="type-icon">🎓</div>
+            <strong>تخرج</strong>
+            <p>حفل تخرج</p>
+        </div>
+        <div class="type-card" onclick="window.location.href='/packages'">
+            <div class="type-icon">👶</div>
+            <strong>مولود</strong>
+            <p>استقبال مولود</p>
+        </div>
+        <div class="type-card" onclick="window.location.href='/packages'">
+            <div class="type-icon">🤝</div>
+            <strong>استقبال</strong>
+            <p>حفل استقبال</p>
+        </div>
+        <div class="type-card" onclick="window.location.href='/packages'">
+            <div class="type-icon">✏️</div>
+            <strong>أخرى</strong>
+            <p>مناسبة خاصة</p>
+        </div>
+    </div>
+</div>
+
+<div class="cta">
+    <h2>جاهز تبدأ؟</h2>
+    <p>انضم لمئات أصحاب المناسبات الذين يثقون بحضور</p>
+    <a href="/packages" class="btn-white">اختر باقتك الآن ←</a>
+</div>
+
+<footer>
+    <p>© 2025 حضور - جميع الحقوق محفوظة</p>
+</footer>
+
+</body>
+</html>

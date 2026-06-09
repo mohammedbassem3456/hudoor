@@ -1,1 +1,374 @@
- 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المناسبة - حضور</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
+
+        nav {
+            background: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.08);
+        }
+        .logo { font-size: 1.8rem; font-weight: 800; color: #0EA5E9; text-decoration: none; }
+        .logo span { color: #1e293b; }
+        .btn-back {
+            background: white;
+            color: #0EA5E9;
+            border: 2px solid #0EA5E9;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+        .event-header {
+            background: linear-gradient(135deg, #0EA5E9, #0284c7);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 25px;
+        }
+        .event-header h1 { font-size: 1.8rem; margin-bottom: 12px; }
+        .event-meta { display: flex; gap: 20px; flex-wrap: wrap; opacity: 0.9; font-size: 0.95rem; }
+        .event-meta span { display: flex; align-items: center; gap: 5px; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        .stat-card .num { font-size: 2rem; font-weight: 900; margin-bottom: 5px; }
+        .stat-card .lbl { color: #888; font-size: 0.85rem; }
+        .total .num { color: #0EA5E9; }
+        .accepted .num { color: #22c55e; }
+        .declined .num { color: #ef4444; }
+        .pending .num { color: #f59e0b; }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .section-header h2 { color: #0c4a6e; font-size: 1.1rem; }
+
+        .btn-add {
+            background: #0EA5E9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .guest-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .guest-row:last-child { border-bottom: none; }
+        .guest-left { display: flex; align-items: center; gap: 12px; }
+        .guest-avatar {
+            width: 40px;
+            height: 40px;
+            background: #e0f2fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #0EA5E9;
+            font-size: 0.9rem;
+        }
+        .guest-name { font-weight: 600; color: #333; font-size: 0.95rem; }
+        .guest-phone { color: #888; font-size: 0.85rem; }
+
+        .status-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: bold;
+        }
+        .status-pending { background: #fef9e7; color: #f59e0b; }
+        .status-accepted { background: #f0fdf4; color: #22c55e; }
+        .status-declined { background: #fef2f2; color: #ef4444; }
+
+        .rsvp-link {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .rsvp-link span { color: #0EA5E9; font-size: 0.85rem; word-break: break-all; }
+        .btn-copy {
+            background: #0EA5E9;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            width: 450px;
+            max-width: 90%;
+        }
+        .modal-content h2 { color: #0c4a6e; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; color: #555; font-size: 0.9rem; }
+        .form-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        .form-group input:focus { outline: none; border-color: #0EA5E9; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-submit {
+            background: #0EA5E9;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            flex: 1;
+            font-family: inherit;
+        }
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #555;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .empty { text-align: center; color: #aaa; padding: 30px; }
+
+        @media (max-width: 768px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="logo">حضور<span>.</span></a>
+    <button class="btn-back" onclick="window.location.href='/dashboard'">← لوحة التحكم</button>
+</nav>
+
+<div class="container">
+
+    <div class="event-header" id="event-header">
+        <p style="opacity:0.7">جاري التحميل...</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card total">
+            <div class="num" id="total">0</div>
+            <div class="lbl">إجمالي المدعوين</div>
+        </div>
+        <div class="stat-card accepted">
+            <div class="num" id="accepted">0</div>
+            <div class="lbl">قبلوا الدعوة</div>
+        </div>
+        <div class="stat-card declined">
+            <div class="num" id="declined">0</div>
+            <div class="lbl">اعتذروا</div>
+        </div>
+        <div class="stat-card pending">
+            <div class="num" id="pending">0</div>
+            <div class="lbl">لم يردوا</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>🔗 رابط الدعوة</h2>
+        </div>
+        <p style="color:#888;font-size:0.9rem;margin-bottom:12px">شارك هذا الرابط مع المدعوين ليتمكنوا من قبول أو رفض الدعوة</p>
+        <div class="rsvp-link">
+            <span id="rsvp-link-text">-</span>
+            <button class="btn-copy" onclick="copyLink()">نسخ الرابط</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>👥 قائمة المدعوين</h2>
+            <button class="btn-add" onclick="openModal()">+ إضافة مدعو</button>
+        </div>
+        <div id="guests-list">
+            <p style="color:#aaa;text-align:center;padding:20px">جاري التحميل...</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h2>إضافة مدعو جديد</h2>
+        <div class="form-group">
+            <label>الاسم الكامل</label>
+            <input type="text" id="guest-name" placeholder="اسم المدعو">
+        </div>
+        <div class="form-group">
+            <label>رقم الجوال</label>
+            <input type="text" id="guest-phone" placeholder="05xxxxxxxx">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-submit" onclick="addGuest()">إضافة</button>
+            <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const eventId = new URLSearchParams(window.location.search).get('id');
+    const baseUrl = window.location.origin;
+
+    const statusMap = {
+        pending: { label: 'لم يرد بعد', class: 'status-pending' },
+        accepted: { label: 'قبل الدعوة ✅', class: 'status-accepted' },
+        declined: { label: 'اعتذر ❌', class: 'status-declined' }
+    };
+
+    async function loadEvent() {
+        const res = await fetch(`/events/${eventId}`);
+        const event = await res.json();
+        const date = event.event_date ? new Date(event.event_date).toLocaleDateString('ar', {year:'numeric',month:'long',day:'numeric'}) : 'غير محدد';
+        document.getElementById('event-header').innerHTML = `
+            <h1>${event.title}</h1>
+            <div class="event-meta">
+                <span>📍 ${event.location || 'غير محدد'}</span>
+                <span>📅 ${date}</span>
+                <span>👤 ${event.owner_name}</span>
+            </div>`;
+    }
+
+    async function loadGuests() {
+        const res = await fetch(`/events/${eventId}/guests`);
+        const data = await res.json();
+        const guests = data.guests;
+
+        document.getElementById('total').textContent = guests.length;
+        document.getElementById('accepted').textContent = guests.filter(g => g.status === 'accepted').length;
+        document.getElementById('declined').textContent = guests.filter(g => g.status === 'declined').length;
+        document.getElementById('pending').textContent = guests.filter(g => g.status === 'pending').length;
+
+        if (guests.length === 0) {
+            document.getElementById('guests-list').innerHTML = '<div class="empty">لا يوجد مدعوين بعد، أضف أول مدعو!</div>';
+            return;
+        }
+
+        document.getElementById('guests-list').innerHTML = guests.map(g => `
+            <div class="guest-row">
+                <div class="guest-left">
+                    <div class="guest-avatar">${g.name.charAt(0)}</div>
+                    <div>
+                        <div class="guest-name">${g.name}</div>
+                        <div class="guest-phone">${g.phone}</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                    <span class="status-badge ${statusMap[g.status].class}">${statusMap[g.status].label}</span>
+                    <button onclick="copyGuestLink('${g.id}')" style="background:#f0f9ff;border:1px solid #bae6fd;color:#0EA5E9;padding:5px 12px;border-radius:15px;cursor:pointer;font-size:0.8rem">نسخ رابطه</button>
+                </div>
+            </div>`).join('');
+    }
+
+    function copyLink() {
+        const link = `${baseUrl}/rsvp-page?guest_id=GUEST_ID`;
+        alert('الرابط: ' + link + '\n\nاستبدل GUEST_ID برقم المدعو');
+    }
+
+    function copyGuestLink(guestId) {
+        const link = `${baseUrl}/rsvp-page?guest_id=${guestId}`;
+        navigator.clipboard.writeText(link).then(() => alert('تم نسخ الرابط ✅'));
+    }
+
+    async function addGuest() {
+        const name = document.getElementById('guest-name').value;
+        const phone = document.getElementById('guest-phone').value;
+        if (!name || !phone) { alert('الرجاء إدخال الاسم والجوال'); return; }
+
+        const res = await fetch('/guests', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ event_id: eventId, name, phone })
+        });
+        const data = await res.json();
+        if (data.success) {
+            closeModal();
+            document.getElementById('guest-name').value = '';
+            document.getElementById('guest-phone').value = '';
+            loadGuests();
+        }
+    }
+
+    function openModal() { document.getElementById('modal').classList.add('active'); }
+    function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+    document.getElementById('rsvp-link-text').textContent = `${baseUrl}/rsvp-page?guest_id=[رقم المدعو]`;
+
+    loadEvent();
+    loadGuests();
+</script>
+
+</body>
+</html> 
