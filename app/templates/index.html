@@ -1,12 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حضور - منصة الدعوات الذكية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #1e293b; }
+        body { font-family: 'Tajawal', sans-serif; background: #fff; color: #1e293b; }
 
         nav {
             background: white;
@@ -19,8 +20,7 @@
             top: 0;
             z-index: 100;
         }
-        .logo { font-size: 1.8rem; font-weight: 800; color: #0EA5E9; }
-        .logo span { color: #1e293b; }
+        .logo { font-size: 2rem; font-weight: 900; color: #0EA5E9; font-family: 'Tajawal', sans-serif; }
         .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-links a { text-decoration: none; color: #555; font-size: 0.95rem; }
         .btn-nav {
@@ -87,19 +87,6 @@
             transition: transform 0.2s;
         }
         .btn-secondary:hover { transform: translateY(-2px); }
-
-        .stats {
-            background: white;
-            padding: 50px 40px;
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .stat-item { text-align: center; }
-        .stat-item .num { font-size: 2.5rem; font-weight: 900; color: #0EA5E9; }
-        .stat-item .lbl { color: #888; font-size: 0.95rem; margin-top: 5px; }
 
         .features {
             padding: 80px 40px;
@@ -210,14 +197,13 @@
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .features-grid { grid-template-columns: 1fr; }
-            .stats { gap: 30px; }
         }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">حضور<span>.</span></div>
+    <div class="logo">حضور</div>
     <div class="nav-links">
         <a href="/packages">الباقات</a>
         <a href="/dashboard">لوحة التحكم</a>
@@ -230,27 +216,8 @@
     <h1>دعواتك تستحق<br><span>لمسة احترافية</span></h1>
     <p>أرسل دعواتك لمئات الضيوف بضغطة واحدة، وتابع التأكيدات لحظة بلحظة مع باركود دخول لكل مدعو</p>
     <div class="hero-btns">
-        <a href="/packages" class="btn-primary">ابدأ مجاناً ←</a>
+        <a href="/packages" class="btn-primary">ابدأ الآن ←</a>
         <a href="#features" class="btn-secondary">اكتشف المزايا</a>
-    </div>
-</div>
-
-<div class="stats">
-    <div class="stat-item">
-        <div class="num">+500</div>
-        <div class="lbl">مناسبة ناجحة</div>
-    </div>
-    <div class="stat-item">
-        <div class="num">+50,000</div>
-        <div class="lbl">دعوة مُرسلة</div>
-    </div>
-    <div class="stat-item">
-        <div class="num">98%</div>
-        <div class="lbl">نسبة الرضا</div>
-    </div>
-    <div class="stat-item">
-        <div class="num">+100</div>
-        <div class="lbl">تصميم جاهز</div>
     </div>
 </div>
 
@@ -263,7 +230,7 @@
         <div class="feature-card">
             <div class="feature-icon">📨</div>
             <h3>دعوات مخصصة</h3>
-            <p>كل مدعو يستلم دعوة باسمه عبر واتساب برسالة احترافية مصممة خصيصاً</p>
+            <p>كل مدعو يستلم دعوة باسمه برسالة احترافية مصممة خصيصاً</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">✅</div>
@@ -273,7 +240,7 @@
         <div class="feature-card">
             <div class="feature-icon">🎟️</div>
             <h3>باركود الدخول</h3>
-            <p>كل ضيف يستلم باركود فريد عند القبول، يُمسح عند الدخول بدون أجهزة خاصة</p>
+            <p>كل ضيف يستلم باركود فريد عند القبول يُمسح عند الدخول بدون أجهزة خاصة</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">📊</div>
@@ -320,7 +287,7 @@
             <p>حفل استقبال</p>
         </div>
         <div class="type-card" onclick="window.location.href='/packages'">
-            <div class="type-icon">✏️</div>
+            <div class="type-icon">✨</div>
             <strong>أخرى</strong>
             <p>مناسبة خاصة</p>
         </div>
@@ -329,7 +296,7 @@
 
 <div class="cta">
     <h2>جاهز تبدأ؟</h2>
-    <p>انضم لمئات أصحاب المناسبات الذين يثقون بحضور</p>
+    <p>انضم لأصحاب المناسبات الذين يثقون بحضور</p>
     <a href="/packages" class="btn-white">اختر باقتك الآن ←</a>
 </div>
 
