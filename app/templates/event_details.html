@@ -17,7 +17,6 @@
             box-shadow: 0 1px 10px rgba(0,0,0,0.08);
         }
         .logo { font-size: 1.8rem; font-weight: 800; color: #0EA5E9; text-decoration: none; }
-        .logo span { color: #1e293b; }
         .btn-back {
             background: white;
             color: #0EA5E9;
@@ -40,7 +39,6 @@
         }
         .event-header h1 { font-size: 1.8rem; margin-bottom: 12px; }
         .event-meta { display: flex; gap: 20px; flex-wrap: wrap; opacity: 0.9; font-size: 0.95rem; }
-        .event-meta span { display: flex; align-items: center; gap: 5px; }
 
         .stats {
             display: grid;
@@ -161,21 +159,10 @@
             background: white;
             border-radius: 20px;
             padding: 35px;
-            width: 450px;
-            max-width: 90%;
+            width: 600px;
+            max-width: 95%;
         }
-        .modal-content h2 { color: #0c4a6e; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; color: #555; font-size: 0.9rem; }
-        .form-group input {
-            width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-family: inherit;
-        }
-        .form-group input:focus { outline: none; border-color: #0EA5E9; }
+        .modal-content h2 { color: #0c4a6e; margin-bottom: 10px; }
         .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
         .btn-submit {
             background: #0EA5E9;
@@ -208,7 +195,7 @@
 <body>
 
 <nav>
-    <a href="/" class="logo">حضور<span>.</span></a>
+    <a href="/" class="logo">حضور</a>
     <button class="btn-back" onclick="window.location.href='/dashboard'">← لوحة التحكم</button>
 </nav>
 
@@ -241,17 +228,16 @@
         <div class="section-header">
             <h2>🔗 رابط الدعوة</h2>
         </div>
-        <p style="color:#888;font-size:0.9rem;margin-bottom:12px">شارك هذا الرابط مع المدعوين ليتمكنوا من قبول أو رفض الدعوة</p>
+        <p style="color:#888;font-size:0.9rem;margin-bottom:12px">شارك رابط كل مدعو معه ليتمكن من قبول أو رفض الدعوة</p>
         <div class="rsvp-link">
             <span id="rsvp-link-text">-</span>
-            <button class="btn-copy" onclick="copyLink()">نسخ الرابط</button>
         </div>
     </div>
 
     <div class="section">
         <div class="section-header">
             <h2>👥 قائمة المدعوين</h2>
-            <button class="btn-add" onclick="openModal()">+ إضافة مدعو</button>
+            <button class="btn-add" onclick="openModal()">+ إضافة مدعوين</button>
         </div>
         <div id="guests-list">
             <p style="color:#aaa;text-align:center;padding:20px">جاري التحميل...</p>
@@ -260,19 +246,22 @@
 
 </div>
 
+<!-- Modal إضافة مدعوين بالجملة -->
 <div class="modal" id="modal">
     <div class="modal-content">
-        <h2>إضافة مدعو جديد</h2>
-        <div class="form-group">
-            <label>الاسم الكامل</label>
-            <input type="text" id="guest-name" placeholder="اسم المدعو">
-        </div>
-        <div class="form-group">
-            <label>رقم الجوال</label>
-            <input type="text" id="guest-phone" placeholder="05xxxxxxxx">
-        </div>
+        <h2>إضافة مدعوين</h2>
+        <p style="color:#888;font-size:0.9rem;margin-bottom:15px">
+            الصق قائمة المدعوين، كل مدعو في سطر:<br>
+            <strong>الاسم رقم_الجوال</strong><br>
+            مثال: محمد العتيبي 0501234567
+        </p>
+        <textarea id="guests-bulk"
+            placeholder="محمد العتيبي 0501234567&#10;سعد الغامدي 0509876543&#10;علي القحطاني 0551234567"
+            style="width:100%;height:300px;padding:12px 15px;border:2px solid #e2e8f0;border-radius:10px;font-size:0.95rem;font-family:inherit;resize:vertical;direction:rtl"
+        ></textarea>
+        <div id="bulk-preview" style="color:#0EA5E9;font-size:0.9rem;margin-top:8px"></div>
         <div class="modal-actions">
-            <button class="btn-submit" onclick="addGuest()">إضافة</button>
+            <button class="btn-submit" id="btn-submit" onclick="addGuestsBulk()">إضافة الكل</button>
             <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
         </div>
     </div>
@@ -287,6 +276,11 @@
         accepted: { label: 'قبل الدعوة ✅', class: 'status-accepted' },
         declined: { label: 'اعتذر ❌', class: 'status-declined' }
     };
+
+    document.getElementById('guests-bulk').addEventListener('input', function() {
+        const lines = this.value.trim().split('\n').filter(l => l.trim());
+        document.getElementById('bulk-preview').textContent = lines.length > 0 ? `✅ ${lines.length} مدعو جاهز للإضافة` : '';
+    });
 
     async function loadEvent() {
         const res = await fetch(`/events/${eventId}`);
@@ -332,33 +326,58 @@
             </div>`).join('');
     }
 
-    function copyLink() {
-        const link = `${baseUrl}/rsvp-page?guest_id=GUEST_ID`;
-        alert('الرابط: ' + link + '\n\nاستبدل GUEST_ID برقم المدعو');
+    async function addGuestsBulk() {
+        const text = document.getElementById('guests-bulk').value.trim();
+        if (!text) { alert('الرجاء إدخال قائمة المدعوين'); return; }
+
+        const lines = text.split('\n').filter(l => l.trim());
+        if (lines.length === 0) { alert('لا يوجد مدعوين'); return; }
+        if (lines.length > 400) { alert('الحد الأقصى 400 مدعو'); return; }
+
+        const btn = document.getElementById('btn-submit');
+        btn.textContent = `جاري الإضافة... 0/${lines.length}`;
+        btn.disabled = true;
+
+        let success = 0;
+        let failed = 0;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            const parts = line.split(/\s+/);
+            if (parts.length < 2) { failed++; continue; }
+
+            const phone = parts[parts.length - 1];
+            const name = parts.slice(0, -1).join(' ');
+
+            if (!name || !phone) { failed++; continue; }
+
+            try {
+                const res = await fetch('/guests', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ event_id: eventId, name, phone })
+                });
+                const data = await res.json();
+                if (data.success) success++;
+                else failed++;
+            } catch { failed++; }
+
+            btn.textContent = `جاري الإضافة... ${i+1}/${lines.length}`;
+        }
+
+        btn.textContent = 'إضافة الكل';
+        btn.disabled = false;
+
+        alert(`✅ تم إضافة ${success} مدعو بنجاح${failed > 0 ? `\n❌ فشل ${failed} مدعو` : ''}`);
+        closeModal();
+        document.getElementById('guests-bulk').value = '';
+        document.getElementById('bulk-preview').textContent = '';
+        loadGuests();
     }
 
     function copyGuestLink(guestId) {
         const link = `${baseUrl}/rsvp-page?guest_id=${guestId}`;
         navigator.clipboard.writeText(link).then(() => alert('تم نسخ الرابط ✅'));
-    }
-
-    async function addGuest() {
-        const name = document.getElementById('guest-name').value;
-        const phone = document.getElementById('guest-phone').value;
-        if (!name || !phone) { alert('الرجاء إدخال الاسم والجوال'); return; }
-
-        const res = await fetch('/guests', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ event_id: eventId, name, phone })
-        });
-        const data = await res.json();
-        if (data.success) {
-            closeModal();
-            document.getElementById('guest-name').value = '';
-            document.getElementById('guest-phone').value = '';
-            loadGuests();
-        }
     }
 
     function openModal() { document.getElementById('modal').classList.add('active'); }
@@ -371,4 +390,4 @@
 </script>
 
 </body>
-</html> 
+</html>
