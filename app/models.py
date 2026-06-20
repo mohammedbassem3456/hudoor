@@ -23,4 +23,13 @@ class RSVPUpdate(BaseModel):
 class GateKeeperCreate(BaseModel):
     event_id: str
     name: str
-    phone: str 
+    phone: str
+
+class UserRegister(BaseModel):
+    email: str
+    password: str
+    name: str
+
+class UserLogin(BaseModel):
+    email: str
+    password: str

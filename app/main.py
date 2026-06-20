@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse
 from app.database import supabase
-from app.models import EventCreate, GuestCreate, RSVPUpdate, GateKeeperCreate
+from app.models import EventCreate, GuestCreate, RSVPUpdate, GateKeeperCreate, UserRegister, UserLogin
 import qrcode
 import uuid
 import os
@@ -33,6 +33,14 @@ async def home():
 async def packages():
     return read_html("packages.html")
 
+@app.get("/login")
+async def login_page():
+    return read_html("login.html")
+
+@app.get("/register")
+async def register_page():
+    return read_html("register.html")
+
 @app.get("/create-event")
 async def create_event_page():
     return read_html("create_event.html")
@@ -52,6 +60,38 @@ async def rsvp_page():
 @app.get("/scanner")
 async def scanner():
     return read_html("scanner.html")
+
+# ═══════════════════════════════
+# Auth
+# ═══════════════════════════════
+
+@app.post("/auth/register")
+async def register(user: UserRegister):
+    try:
+        res = supabase.auth.sign_up({
+            "email": user.email,
+            "password": user.password
+        })
+        uid = res.user.id
+        supabase.table("users").insert({
+            "id": uid,
+            "email": user.email,
+            "name": user.name
+        }).execute()
+        return {"success": True, "access_token": res.session.access_token}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/auth/login")
+async def login(user: UserLogin):
+    try:
+        res = supabase.auth.sign_in_with_password({
+            "email": user.email,
+            "password": user.password
+        })
+        return {"success": True, "access_token": res.session.access_token}
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="إيميل أو كلمة السر غلط")
 
 # ═══════════════════════════════
 # API المناسبات
