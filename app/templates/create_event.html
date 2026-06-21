@@ -322,6 +322,10 @@
     let selectedDesign = '';
     const params = new URLSearchParams(window.location.search);
 
+    // لو ما في token يرجعه لصفحة Login
+    const token = localStorage.getItem('access_token');
+    if (!token) window.location.href = '/login';
+
     function selectType(card, type) {
         document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
@@ -384,7 +388,10 @@
 
             const res = await fetch('/events', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(event)
             });
 

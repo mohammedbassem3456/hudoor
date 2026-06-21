@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse
 from app.database import supabase
 from app.models import EventCreate, GuestCreate, RSVPUpdate, GateKeeperCreate, UserRegister, UserLogin
+from typing import Optional
 import qrcode
 import uuid
 import os
@@ -98,14 +99,30 @@ async def login(user: UserLogin):
 # ═══════════════════════════════
 
 @app.post("/events")
-async def create_event(event: EventCreate):
-    data = supabase.table("events").insert(event.dict()).execute()
-    return {"success": True, "event": data.data[0]}
+async def create_event(event: EventCreate, authorization: Optional[str] = Header(None)):
+    try:
+        event_data = event.dict()
+        if authorization:
+            token = authorization.replace("Bearer ", "")
+            user = supabase.auth.get_user(token)
+            event_data["user_id"] = user.user.id
+        data = supabase.table("events").insert(event_data).execute()
+        return {"success": True, "event": data.data[0]}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/events-list")
-async def get_events_list():
-    data = supabase.table("events").select("*").execute()
-    return {"events": data.data}
+async def get_events_list(authorization: Optional[str] = Header(None)):
+    try:
+        if authorization:
+            token = authorization.replace("Bearer ", "")
+            user = supabase.auth.get_user(token)
+            data = supabase.table("events").select("*").eq("user_id", user.user.id).execute()
+        else:
+            data = supabase.table("events").select("*").execute()
+        return {"events": data.data}
+    except Exception as e:
+        return {"events": []}
 
 @app.get("/events/{event_id}")
 async def get_event(event_id: str):
