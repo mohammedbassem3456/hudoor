@@ -18,6 +18,7 @@
         }
         .logo { font-size: 1.8rem; font-weight: 800; color: #0EA5E9; text-decoration: none; }
         .logo span { color: #1e293b; }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
         .btn-new {
             background: #0EA5E9;
             color: white;
@@ -30,6 +31,18 @@
             font-family: inherit;
             text-decoration: none;
         }
+        .btn-logout {
+            background: white;
+            color: #ef4444;
+            border: 2px solid #ef4444;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            font-family: inherit;
+        }
+        .btn-logout:hover { background: #ef4444; color: white; }
 
         .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
 
@@ -145,7 +158,10 @@
 
 <nav>
     <a href="/" class="logo">حضور<span>.</span></a>
-    <a href="/create-event" class="btn-new">+ مناسبة جديدة</a>
+    <div class="nav-left">
+        <a href="/create-event" class="btn-new">+ مناسبة جديدة</a>
+        <button class="btn-logout" onclick="logout()">خروج</button>
+    </div>
 </nav>
 
 <div class="container">
@@ -195,13 +211,23 @@
 </div>
 
 <script>
+    const token = localStorage.getItem('access_token');
+    if (!token) window.location.href = '/login';
+
     const typeIcons = {
         wedding: '💍', graduation: '🎓', baby: '👶',
         reception: '🤝', other: '✨'
     };
 
+    function logout() {
+        localStorage.removeItem('access_token');
+        window.location.href = '/login';
+    }
+
     async function loadDashboard() {
-        const res = await fetch('/events-list');
+        const res = await fetch('/events-list', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         const data = await res.json();
         const events = data.events;
 
