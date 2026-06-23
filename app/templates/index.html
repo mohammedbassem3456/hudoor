@@ -206,8 +206,8 @@
     <div class="logo">حضور</div>
     <div class="nav-links">
         <a href="/packages">الباقات</a>
-        <a href="/dashboard">لوحة التحكم</a>
-        <a href="/packages" class="btn-nav">ابدأ الآن</a>
+        <a href="#" id="nav-dashboard" onclick="goToDashboard()">لوحة التحكم</a>
+        <a href="#" id="nav-btn" class="btn-nav" onclick="goToStart()">ابدأ الآن</a>
     </div>
 </nav>
 
@@ -216,7 +216,7 @@
     <h1>دعواتك تستحق<br><span>لمسة احترافية</span></h1>
     <p>أرسل دعواتك لمئات الضيوف بضغطة واحدة، وتابع التأكيدات لحظة بلحظة مع باركود دخول لكل مدعو</p>
     <div class="hero-btns">
-        <a href="/packages" class="btn-primary">ابدأ الآن ←</a>
+        <a href="#" class="btn-primary" onclick="goToStart()">ابدأ الآن ←</a>
         <a href="#features" class="btn-secondary">اكتشف المزايا</a>
     </div>
 </div>
@@ -266,27 +266,27 @@
         <p>حضور يدعم جميع أنواع المناسبات</p>
     </div>
     <div class="types-grid">
-        <div class="type-card" onclick="window.location.href='/packages'">
+        <div class="type-card" onclick="goToStart()">
             <div class="type-icon">💍</div>
             <strong>عرس</strong>
             <p>حفل زواج</p>
         </div>
-        <div class="type-card" onclick="window.location.href='/packages'">
+        <div class="type-card" onclick="goToStart()">
             <div class="type-icon">🎓</div>
             <strong>تخرج</strong>
             <p>حفل تخرج</p>
         </div>
-        <div class="type-card" onclick="window.location.href='/packages'">
+        <div class="type-card" onclick="goToStart()">
             <div class="type-icon">👶</div>
             <strong>مولود</strong>
             <p>استقبال مولود</p>
         </div>
-        <div class="type-card" onclick="window.location.href='/packages'">
+        <div class="type-card" onclick="goToStart()">
             <div class="type-icon">🤝</div>
             <strong>استقبال</strong>
             <p>حفل استقبال</p>
         </div>
-        <div class="type-card" onclick="window.location.href='/packages'">
+        <div class="type-card" onclick="goToStart()">
             <div class="type-icon">✨</div>
             <strong>أخرى</strong>
             <p>مناسبة خاصة</p>
@@ -297,12 +297,37 @@
 <div class="cta">
     <h2>جاهز تبدأ؟</h2>
     <p>انضم لأصحاب المناسبات الذين يثقون بحضور</p>
-    <a href="/packages" class="btn-white">اختر باقتك الآن ←</a>
+    <a href="#" class="btn-white" onclick="goToStart()">ابدأ الآن ←</a>
 </div>
 
 <footer>
     <p>© 2025 حضور - جميع الحقوق محفوظة</p>
 </footer>
+
+<script>
+    const token = localStorage.getItem('access_token');
+
+    // لو مسجل دخول غير زر الناف
+    if (token) {
+        document.getElementById('nav-btn').textContent = 'لوحة التحكم';
+    }
+
+    function goToStart() {
+        if (token) {
+            window.location.href = '/dashboard';
+        } else {
+            window.location.href = '/login';
+        }
+    }
+
+    function goToDashboard() {
+        if (token) {
+            window.location.href = '/dashboard';
+        } else {
+            window.location.href = '/login';
+        }
+    }
+</script>
 
 </body>
 </html>
