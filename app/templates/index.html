@@ -25,10 +25,14 @@
         .nav-links a { text-decoration: none; color: #555; font-size: 0.95rem; }
         .btn-nav {
             background: #0EA5E9;
-            color: white !important;
+            color: white;
             padding: 10px 25px;
             border-radius: 25px;
             font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 0.95rem;
         }
 
         .hero {
@@ -68,11 +72,13 @@
             color: white;
             padding: 16px 40px;
             border-radius: 30px;
-            text-decoration: none;
             font-size: 1.1rem;
             font-weight: bold;
             box-shadow: 0 8px 25px rgba(14,165,233,0.3);
             transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
         }
         .btn-primary:hover { transform: translateY(-2px); }
         .btn-secondary {
@@ -178,11 +184,13 @@
             color: #0EA5E9;
             padding: 16px 50px;
             border-radius: 30px;
-            text-decoration: none;
             font-size: 1.1rem;
             font-weight: bold;
             display: inline-block;
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: none;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
         }
 
         footer {
@@ -206,8 +214,8 @@
     <div class="logo">حضور</div>
     <div class="nav-links">
         <a href="/packages">الباقات</a>
-        <a href="#" id="nav-dashboard" onclick="goToDashboard()">لوحة التحكم</a>
-        <a href="#" id="nav-btn" class="btn-nav" onclick="goToStart()">ابدأ الآن</a>
+        <a href="/dashboard">لوحة التحكم</a>
+        <button id="nav-btn" class="btn-nav" onclick="goToStart()">ابدأ الآن</button>
     </div>
 </nav>
 
@@ -216,7 +224,7 @@
     <h1>دعواتك تستحق<br><span>لمسة احترافية</span></h1>
     <p>أرسل دعواتك لمئات الضيوف بضغطة واحدة، وتابع التأكيدات لحظة بلحظة مع باركود دخول لكل مدعو</p>
     <div class="hero-btns">
-        <a href="#" class="btn-primary" onclick="goToStart()">ابدأ الآن ←</a>
+        <button class="btn-primary" onclick="goToStart()">ابدأ الآن ←</button>
         <a href="#features" class="btn-secondary">اكتشف المزايا</a>
     </div>
 </div>
@@ -297,7 +305,7 @@
 <div class="cta">
     <h2>جاهز تبدأ؟</h2>
     <p>انضم لأصحاب المناسبات الذين يثقون بحضور</p>
-    <a href="#" class="btn-white" onclick="goToStart()">ابدأ الآن ←</a>
+    <button class="btn-white" onclick="goToStart()">ابدأ الآن ←</button>
 </div>
 
 <footer>
@@ -307,21 +315,12 @@
 <script>
     const token = localStorage.getItem('access_token');
 
-    // لو مسجل دخول غير زر الناف
     if (token) {
         document.getElementById('nav-btn').textContent = 'لوحة التحكم';
     }
 
     function goToStart() {
-        if (token) {
-            window.location.href = '/dashboard';
-        } else {
-            window.location.href = '/login';
-        }
-    }
-
-    function goToDashboard() {
-        if (token) {
+        if (localStorage.getItem('access_token')) {
             window.location.href = '/dashboard';
         } else {
             window.location.href = '/login';
