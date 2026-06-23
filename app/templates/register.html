@@ -49,7 +49,7 @@
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('access_token', data.access_token);
-        window.location.href = '/dashboard';
+        window.location.href = '/packages';
       } else {
         errorEl.textContent = data.detail || 'حدث خطأ';
         errorEl.style.display = 'block';
